@@ -130,8 +130,8 @@ namespace NATPMP
                 IPAddress gatewayIP = IPAddress.Parse(comboGateway.Text.Trim());
                 int portLocal = ParsePort(textLocalPort.Text.Trim());
                 int portDesired = ParsePort(textExternalPort.Text.Trim());
-                await RequestMapping(udp_, new IPEndPoint(gatewayIP, PORT_NAT_PMP), portLocal, portDesired, 0);
                 mapped = false;
+                await RequestMapping(udp_, new IPEndPoint(gatewayIP, PORT_NAT_PMP), portLocal, portDesired, 0);
             }
             catch (Exception x)
             {
