@@ -158,9 +158,10 @@ namespace NATPMP
 
         static async Task<Tuple<IPEndPoint, IPAddress>> RequestExternalIPAddress(UdpClient udp, IPEndPoint gateway)
         {
+            udp.Connect(gateway);
             byte[] data = new byte[] { VER, OP_ADR, };
             Debug.WriteLine($"OUTGOING: {gateway} {ByteArrayToString(data)}");
-            udp.Send(data, data.Length, gateway);
+            udp.Send(data, data.Length);
             return await Task.Run(() =>
             {
                 IPEndPoint peer = null;
@@ -190,6 +191,7 @@ namespace NATPMP
 
         static async Task<int> RequestMapping(UdpClient udp, IPEndPoint gateway, int localPort, int desiredPort, int lifetime)
         {
+            udp.Connect(gateway);
             byte[] data = new byte[] {
                 VER, OP_TCP, 0, 0,
                 (byte) (localPort >> 8), (byte) localPort,
@@ -197,7 +199,7 @@ namespace NATPMP
                 (byte) (lifetime >> 24), (byte) (lifetime >> 16), (byte) (lifetime >> 8), (byte) lifetime,
             };
             Debug.WriteLine($"OUTGOING: {gateway} {ByteArrayToString(data)}");
-            udp.Send(data, data.Length, gateway);
+            udp.Send(data, data.Length);
             return await Task.Run(() =>
             {
                 IPEndPoint peer = null;
